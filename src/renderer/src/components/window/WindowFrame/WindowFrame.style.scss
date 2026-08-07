@@ -1,0 +1,92 @@
+.window-frame {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    min-width: 260px;
+    min-height: 160px;
+}
+
+.window-frame--focused {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent);
+}
+
+.window-frame__titlebar {
+    height: var(--window-titlebar-height);
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-2) 0 var(--space-3);
+    background: var(--color-window-header);
+    color: var(--color-window-header-text);
+    cursor: grab;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.window-frame__title {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.window-frame__controls {
+    display: flex;
+    gap: var(--space-1);
+    flex: 0 0 auto;
+}
+
+.window-frame__control {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.window-frame__control:hover {
+    background: rgba(127, 127, 127, 0.2);
+}
+
+.window-frame__control--close:hover {
+    background: var(--color-danger);
+    color: #fff;
+}
+
+.window-frame__body {
+    flex: 1 1 auto;
+    overflow: auto;
+    position: relative;
+}
+
+.window-frame__resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+}
+
+.window-frame__resize-handle::after {
+    content: '';
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--color-border-strong);
+    border-bottom: 2px solid var(--color-border-strong);
+}

@@ -1,0 +1,190 @@
+.scenes {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-3);
+    gap: var(--space-3);
+}
+
+.scenes__toolbar {
+    flex: 0 0 auto;
+}
+
+.scenes__list {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.scenes__empty {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+    padding: var(--space-6) 0;
+}
+
+.scenes__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+}
+
+.scenes__card--active {
+    border-color: var(--color-accent);
+}
+
+.scenes__active-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-accent);
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.scenes__card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.scenes__card-title {
+    flex: 1 1 auto;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+}
+
+.scenes__card-description {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    white-space: pre-wrap;
+}
+
+.scenes__section-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.scenes__plans {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.scenes__plan-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+}
+
+.scenes__plan-info {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.scenes__plan-name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+}
+
+.scenes__plan-summary {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scenes__add-plan {
+    align-self: flex-start;
+}
+
+.scenes__master-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.scenes__master-card-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+}
+
+.scenes__master-card-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scenes__add-master-card {
+    align-self: flex-start;
+    width: auto;
+}
+
+.scenes__monster-list {
+    max-height: 240px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2);
+}
+
+.scenes__monster-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+}
+
+.scenes__monster-name {
+    font-size: var(--fs-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scenes__counter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+}
+
+.scenes__count {
+    min-width: 16px;
+    text-align: center;
+    font-size: var(--fs-sm);
+    font-variant-numeric: tabular-nums;
+}

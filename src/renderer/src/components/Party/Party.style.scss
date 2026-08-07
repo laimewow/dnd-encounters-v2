@@ -1,0 +1,26 @@
+.party {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-3);
+    gap: var(--space-3);
+}
+
+.party__toolbar {
+    flex: 0 0 auto;
+}
+
+.party__list {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.party__empty {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+    padding: var(--space-6) 0;
+}

@@ -1,0 +1,23 @@
+.master-card-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-3);
+    gap: var(--space-2);
+}
+
+.master-card-window__title {
+    font-weight: var(--fw-semibold);
+    flex: 0 0 auto;
+}
+
+.master-card-window__text {
+    flex: 1 1 auto;
+    resize: none;
+}
+
+.master-card-window__missing {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--space-6) 0;
+}

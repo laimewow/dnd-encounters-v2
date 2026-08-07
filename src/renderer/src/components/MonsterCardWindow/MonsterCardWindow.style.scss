@@ -1,0 +1,86 @@
+.monster-card-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-3);
+    gap: var(--space-3);
+    overflow-y: auto;
+}
+
+.monster-card-window__missing {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--space-6) 0;
+}
+
+.monster-card-window__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 0 0 auto;
+}
+
+.monster-card-window__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    background: var(--color-surface-alt);
+}
+
+.monster-card-window__title {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+}
+
+.monster-card-window__stats {
+    display: flex;
+    gap: var(--space-4);
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    flex: 0 0 auto;
+}
+
+.monster-card-window__attacks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+}
+
+.monster-card-window__attack {
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+}
+
+.monster-card-window__attack-line {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
+}
+
+.monster-card-window__attack-name {
+    font-weight: var(--fw-medium);
+}
+
+.monster-card-window__attack-formula {
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-secondary);
+}
+
+.monster-card-window__attack-notes {
+    margin: var(--space-1) 0 0;
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    white-space: pre-wrap;
+}
+
+.monster-card-window__notes {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    white-space: pre-wrap;
+}

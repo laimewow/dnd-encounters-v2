@@ -1,0 +1,50 @@
+{
+  "name": "dnd-encounters-v2",
+  "version": "0.1.0",
+  "description": "DM helper for running D&D encounters — Electron desktop app",
+  "main": "./out/main/index.js",
+  "author": "laime-x",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron-vite preview",
+    "build:win": "electron-vite build && electron-builder --win",
+    "build:linux": "electron-vite build && electron-builder --linux",
+    "gen-component": "gen-component",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@xyflow/react": "^12.11.2",
+    "basic-front": "file:../basic-front",
+    "i18next": "^26.3.6",
+    "lucide-react": "^0.539.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-i18next": "^17.0.10",
+    "react-router-dom": "^7.2.0",
+    "react-toastify": "^11.1.0",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/node": "^22.13.5",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "electron": "^43.3.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "sass": "^1.101.0",
+    "typescript": "^7.0.2",
+    "vite": "^7.0.0"
+  }
+}

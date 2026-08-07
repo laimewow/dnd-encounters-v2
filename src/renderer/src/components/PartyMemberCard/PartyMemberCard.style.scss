@@ -1,0 +1,26 @@
+.party-member-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-3);
+}
+
+.party-member-card__icon-row {
+    display: flex;
+    justify-content: center;
+}
+
+.party-member-card__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+}
+
+.party-member-card__missing {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--space-6) 0;
+}

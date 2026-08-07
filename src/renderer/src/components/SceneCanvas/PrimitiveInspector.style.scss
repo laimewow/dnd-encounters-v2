@@ -1,0 +1,56 @@
+.primitive-inspector {
+    /* position + z-index (not just being a normal-flow sibling) is required: a plain
+       static element always paints below ANY positioned sibling in CSS's painting order
+       (floating .window-frame elements are position:absolute), regardless of DOM order.
+       Same zIndex-escape reasoning as .scene-canvas__toolbar — see SceneCanvas.style.scss. */
+    position: relative;
+    z-index: 10000;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    max-height: 40vh;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+}
+
+.primitive-inspector > .field {
+    min-width: 160px;
+}
+
+.primitive-inspector__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+.primitive-inspector__title {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+}
+
+.primitive-inspector__color {
+    height: var(--control-height);
+    width: 100%;
+    padding: 2px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    cursor: pointer;
+}
+
+.primitive-inspector__remove {
+    flex: 0 0 auto;
+}
+
+.primitive-inspector__rotate {
+    display: flex;
+    gap: var(--space-2);
+}

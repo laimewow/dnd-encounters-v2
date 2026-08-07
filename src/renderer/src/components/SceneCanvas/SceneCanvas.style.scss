@@ -1,0 +1,53 @@
+.scene-canvas {
+    position: absolute;
+    inset: 0;
+    /* Deliberately no z-index here: an explicit value (even 0) would make this element
+       establish its own stacking context, which would trap the z-index:10000 overlays
+       below (.scene-canvas__toolbar, .primitive-palette) inside it — capping them at this
+       element's own stacking level and making them unable to ever paint above a floating
+       .window-frame (which always carries an explicit zIndex >= 1), no matter how high
+       their own z-index is set. Leaving this z-index unset (auto) still keeps the backdrop
+       itself behind every floating window (auto always loses to any explicit positive
+       z-index), while letting the overlays escape to compete directly against windows in
+       the shared .desktop stacking context. */
+    display: flex;
+    flex-direction: column;
+}
+
+.scene-canvas__empty {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+    padding: var(--space-6);
+}
+
+.scene-canvas__toolbar {
+    position: relative;
+    /* Must clear floating windows' zIndex — see the .scene-canvas comment above. */
+    z-index: 10000;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.scene-canvas__scene-name {
+    flex: 1 1 auto;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scene-canvas__viewport {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.scene-canvas__viewport .react-flow {
+    background: var(--color-surface-alt);
+}
