@@ -1,11 +1,13 @@
 import { app, shell, BrowserWindow, ipcMain, protocol, net } from 'electron'
-import { join } from 'node:path'
+import { isAbsolute, join, relative } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { loadState, getState, setState, flushState } from './stateStore'
 import { exportBackup, importBackup } from './backup'
 import { listResources, saveResource, saveManyResources, removeResource } from './resourceStore'
 import { pickMonsterImportFolder, readMonsterImportFolder } from './monsterImport'
+import { saveCanvasImage } from './canvasImages'
+import { portableRoot } from './paths'
 
 // Production loads the renderer through this custom scheme instead of file://.
 // react-router's createBrowserRouter (used internally by basic-front's
@@ -29,6 +31,20 @@ protocol.registerSchemesAsPrivileged([
 function registerAppProtocol(): void {
     protocol.handle('app', (request) => {
         const url = new URL(request.url)
+
+        // app://data/<relative path> serves files out of the portable data dir (currently
+        // just saved canvas images) — used directly as <img src>. Guard against path
+        // traversal since the pathname ultimately comes from renderer-controlled content.
+        if (url.host === 'data') {
+            const root = portableRoot()
+            const filePath = join(root, decodeURIComponent(url.pathname))
+            const rel = relative(root, filePath)
+            if (rel.startsWith('..') || isAbsolute(rel)) {
+                return new Response('Forbidden', { status: 403 })
+            }
+            return net.fetch(pathToFileURL(filePath).toString())
+        }
+
         const relativePath = url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname)
         const filePath = join(__dirname, '../renderer', relativePath)
         return net.fetch(pathToFileURL(filePath).toString())
@@ -113,6 +129,10 @@ app.whenReady().then(() => {
     })
 
     ipcMain.handle('monsters:readImportFolder', (_event, folderPath: string) => readMonsterImportFolder(folderPath))
+
+    ipcMain.handle('images:save', (_event, bytes: ArrayBuffer, extension: string) =>
+        saveCanvasImage(Buffer.from(bytes), extension),
+    )
 
     ipcMain.handle('backup:export', async (event, json: string) => {
         const window = BrowserWindow.fromWebContents(event.sender)

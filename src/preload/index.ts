@@ -20,6 +20,10 @@ const api = {
         readFolder: (folderPath: string): Promise<{ raw: unknown; iconDataUrl: string | null }[]> =>
             ipcRenderer.invoke('monsters:readImportFolder', folderPath),
     },
+    images: {
+        save: (bytes: ArrayBuffer, extension: string): Promise<string> =>
+            ipcRenderer.invoke('images:save', bytes, extension),
+    },
 }
 
 try {

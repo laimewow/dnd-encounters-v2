@@ -104,7 +104,7 @@ export interface Game {
     createdAt: string
 }
 
-export type PrimitiveShape = 'square' | 'circle' | 'star' | 'triangle' | 'arrow'
+export type PrimitiveShape = 'square' | 'circle' | 'star' | 'triangle' | 'arrow' | 'line' | 'text' | 'image' | 'sticker'
 
 export type PrimitiveAction =
     | { type: 'none' }
@@ -123,6 +123,16 @@ export interface CanvasPrimitive {
     textColor: string
     label: string
     action: PrimitiveAction
+    /** shape === 'line' only: the second endpoint, in the same absolute canvas space as x/y. */
+    x2?: number
+    y2?: number
+    /** shape === 'image' | 'sticker' only: display size in px. */
+    width?: number
+    height?: number
+    /** shape === 'image' only: app://data/... URL for the saved working copy. */
+    imageUrl?: string
+    /** shape === 'sticker' only: multi-line freeform note text (the title lives in `label`). */
+    content?: string
 }
 
 export interface Scene {

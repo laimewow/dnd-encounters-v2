@@ -51,18 +51,35 @@ function updatePrimitive(sceneId: string, primitiveId: string, patch: Partial<Om
     )
 }
 
+/** Default span for a freshly-created line, before the user drags an endpoint. */
+const DEFAULT_LINE_LENGTH = 64
+
+/** Default size for a freshly-created sticker, before the user drags its resize handle. */
+const STICKER_DEFAULT_WIDTH = 220
+const STICKER_DEFAULT_HEIGHT = 160
+
 function newPrimitive(shape: PrimitiveShape, x: number, y: number): CanvasPrimitive {
-    return {
+    const primitive: CanvasPrimitive = {
         id: genId(),
         shape,
         x,
         y,
         rotation: 0,
         fillColor: '#2f6fed',
-        textColor: '#ffffff',
-        label: '',
+        textColor: '#000000',
+        label: shape === 'text' ? 'текст' : '',
         action: { type: 'none' },
     }
+    if (shape === 'line') {
+        primitive.x2 = x + DEFAULT_LINE_LENGTH
+        primitive.y2 = y + DEFAULT_LINE_LENGTH
+    }
+    if (shape === 'sticker') {
+        primitive.width = STICKER_DEFAULT_WIDTH
+        primitive.height = STICKER_DEFAULT_HEIGHT
+        primitive.content = ''
+    }
+    return primitive
 }
 
 function rotatePrimitive(sceneId: string, primitiveId: string, delta: number) {
@@ -169,6 +186,34 @@ export const Scenes = {
 
     movePrimitive(sceneId: string, primitiveId: string, x: number, y: number) {
         updatePrimitive(sceneId, primitiveId, { x, y })
+    },
+
+    addImagePrimitive(
+        sceneId: string,
+        imageUrl: string,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+    ): CanvasPrimitive {
+        const primitive: CanvasPrimitive = {
+            id: genId(),
+            shape: 'image',
+            x,
+            y,
+            width,
+            height,
+            imageUrl,
+            rotation: 0,
+            fillColor: '#2f6fed',
+            textColor: '#000000',
+            label: '',
+            action: { type: 'none' },
+        }
+        setScenes((scenes) =>
+            scenes.map((s) => (s.id === sceneId ? { ...s, primitives: [...s.primitives, primitive] } : s)),
+        )
+        return primitive
     },
 
     rotatePrimitive,

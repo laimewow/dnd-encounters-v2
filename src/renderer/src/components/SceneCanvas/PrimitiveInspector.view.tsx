@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { RotateCcw, RotateCw, X, Trash2 } from 'lucide-react'
-import type { CanvasPrimitive, MasterCard, PrimitiveAction, Scene } from '../../domain/types'
+import type { CanvasPrimitive, MasterCard, PrimitiveAction, PrimitiveShape, Scene } from '../../domain/types'
 import './PrimitiveInspector.style.scss'
+
+const HAS_LABEL: PrimitiveShape[] = ['square', 'circle', 'star', 'triangle', 'arrow', 'text']
+const HAS_FILL_COLOR: PrimitiveShape[] = ['square', 'circle', 'star', 'triangle', 'arrow', 'line']
+const HAS_TEXT_COLOR: PrimitiveShape[] = ['square', 'circle', 'star', 'triangle', 'arrow', 'text']
+const HAS_ROTATION: PrimitiveShape[] = ['square', 'circle', 'star', 'triangle', 'arrow', 'text', 'image']
+const HAS_ACTION: PrimitiveShape[] = ['square', 'circle', 'star', 'triangle', 'arrow', 'image']
 
 interface PrimitiveInspectorProps {
     primitive: CanvasPrimitive
@@ -65,6 +71,8 @@ export const PrimitiveInspector = ({
     const [localTextColor, onTextColorChange] = useDebouncedColor(primitive.textColor, primitive.id, (color) =>
         onChange({ textColor: color }),
     )
+    const showFillColor = HAS_FILL_COLOR.includes(primitive.shape)
+    const showTextColor = HAS_TEXT_COLOR.includes(primitive.shape)
 
     const onActionTypeChange = (type: PrimitiveAction['type']) => {
         let action: PrimitiveAction
@@ -100,18 +108,42 @@ export const PrimitiveInspector = ({
                 </button>
             </div>
 
-            <label className="field">
-                <span className="field__label">Текст</span>
-                <input
-                    className="input"
-                    value={primitive.label}
-                    onChange={(e) => onChange({ label: e.target.value })}
-                />
-            </label>
-
-            <div className="field-row">
+            {HAS_LABEL.includes(primitive.shape) && (
                 <label className="field">
-                    <span className="field__label">Цвет заливки</span>
+                    <span className="field__label">Текст</span>
+                    <input
+                        className="input"
+                        value={primitive.label}
+                        onChange={(e) => onChange({ label: e.target.value })}
+                    />
+                </label>
+            )}
+
+            {showFillColor && showTextColor && (
+                <div className="field-row">
+                    <label className="field">
+                        <span className="field__label">Цвет заливки</span>
+                        <input
+                            className="primitive-inspector__color"
+                            type="color"
+                            value={localFillColor}
+                            onChange={(e) => onFillColorChange(e.target.value)}
+                        />
+                    </label>
+                    <label className="field">
+                        <span className="field__label">Цвет текста</span>
+                        <input
+                            className="primitive-inspector__color"
+                            type="color"
+                            value={localTextColor}
+                            onChange={(e) => onTextColorChange(e.target.value)}
+                        />
+                    </label>
+                </div>
+            )}
+            {showFillColor && !showTextColor && (
+                <label className="field">
+                    <span className="field__label">{primitive.shape === 'line' ? 'Цвет линии' : 'Цвет заливки'}</span>
                     <input
                         className="primitive-inspector__color"
                         type="color"
@@ -119,6 +151,8 @@ export const PrimitiveInspector = ({
                         onChange={(e) => onFillColorChange(e.target.value)}
                     />
                 </label>
+            )}
+            {!showFillColor && showTextColor && (
                 <label className="field">
                     <span className="field__label">Цвет текста</span>
                     <input
@@ -128,97 +162,103 @@ export const PrimitiveInspector = ({
                         onChange={(e) => onTextColorChange(e.target.value)}
                     />
                 </label>
-            </div>
+            )}
 
-            <div className="field">
-                <span className="field__label">Поворот</span>
-                <div className="primitive-inspector__rotate">
-                    <button
-                        type="button"
-                        className="btn btn--outline"
-                        onClick={() => onRotate(-90)}
-                        title="Повернуть на 90° против часовой"
-                    >
-                        <RotateCcw size={16} />
-                    </button>
-                    <button
-                        type="button"
-                        className="btn btn--outline"
-                        onClick={() => onRotate(90)}
-                        title="Повернуть на 90° по часовой"
-                    >
-                        <RotateCw size={16} />
-                    </button>
+            {HAS_ROTATION.includes(primitive.shape) && (
+                <div className="field">
+                    <span className="field__label">Поворот</span>
+                    <div className="primitive-inspector__rotate">
+                        <button
+                            type="button"
+                            className="btn btn--outline"
+                            onClick={() => onRotate(-90)}
+                            title="Повернуть на 90° против часовой"
+                        >
+                            <RotateCcw size={16} />
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn--outline"
+                            onClick={() => onRotate(90)}
+                            title="Повернуть на 90° по часовой"
+                        >
+                            <RotateCw size={16} />
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-            <label className="field">
-                <span className="field__label">Действие по двойному клику</span>
-                <select
-                    className="select"
-                    value={primitive.action.type}
-                    onChange={(e) => onActionTypeChange(e.target.value as PrimitiveAction['type'])}
-                >
-                    {Object.entries(ACTION_LABELS).map(([type, label]) => (
-                        <option key={type} value={type}>
-                            {label}
-                        </option>
-                    ))}
-                </select>
-            </label>
-
-            {primitive.action.type === 'openMasterCard' && (
-                <label className="field">
-                    <span className="field__label">Карточка</span>
-                    <select
-                        className="select"
-                        value={primitive.action.cardId}
-                        onChange={(e) => onTargetChange(e.target.value)}
-                    >
-                        <option value="">—</option>
-                        {masterCards.map((c) => (
-                            <option key={c.id} value={c.id}>
-                                {c.title}
-                            </option>
-                        ))}
-                    </select>
-                </label>
             )}
 
-            {primitive.action.type === 'startEncounter' && (
-                <label className="field">
-                    <span className="field__label">Запланированный энкаунтер</span>
-                    <select
-                        className="select"
-                        value={primitive.action.planId}
-                        onChange={(e) => onTargetChange(e.target.value)}
-                    >
-                        <option value="">—</option>
-                        {scene.plannedEncounters.map((p) => (
-                            <option key={p.id} value={p.id}>
-                                {p.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            )}
+            {HAS_ACTION.includes(primitive.shape) && (
+                <>
+                    <label className="field">
+                        <span className="field__label">Действие по двойному клику</span>
+                        <select
+                            className="select"
+                            value={primitive.action.type}
+                            onChange={(e) => onActionTypeChange(e.target.value as PrimitiveAction['type'])}
+                        >
+                            {Object.entries(ACTION_LABELS).map(([type, label]) => (
+                                <option key={type} value={type}>
+                                    {label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
 
-            {primitive.action.type === 'switchScene' && (
-                <label className="field">
-                    <span className="field__label">Сцена</span>
-                    <select
-                        className="select"
-                        value={primitive.action.sceneId}
-                        onChange={(e) => onTargetChange(e.target.value)}
-                    >
-                        <option value="">—</option>
-                        {scenesForGame.map((s) => (
-                            <option key={s.id} value={s.id}>
-                                {s.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
+                    {primitive.action.type === 'openMasterCard' && (
+                        <label className="field">
+                            <span className="field__label">Карточка</span>
+                            <select
+                                className="select"
+                                value={primitive.action.cardId}
+                                onChange={(e) => onTargetChange(e.target.value)}
+                            >
+                                <option value="">—</option>
+                                {masterCards.map((c) => (
+                                    <option key={c.id} value={c.id}>
+                                        {c.title}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    )}
+
+                    {primitive.action.type === 'startEncounter' && (
+                        <label className="field">
+                            <span className="field__label">Запланированный энкаунтер</span>
+                            <select
+                                className="select"
+                                value={primitive.action.planId}
+                                onChange={(e) => onTargetChange(e.target.value)}
+                            >
+                                <option value="">—</option>
+                                {scene.plannedEncounters.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    )}
+
+                    {primitive.action.type === 'switchScene' && (
+                        <label className="field">
+                            <span className="field__label">Сцена</span>
+                            <select
+                                className="select"
+                                value={primitive.action.sceneId}
+                                onChange={(e) => onTargetChange(e.target.value)}
+                            >
+                                <option value="">—</option>
+                                {scenesForGame.map((s) => (
+                                    <option key={s.id} value={s.id}>
+                                        {s.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    )}
+                </>
             )}
 
             <button type="button" className="btn btn--danger primitive-inspector__remove" onClick={onRemove}>

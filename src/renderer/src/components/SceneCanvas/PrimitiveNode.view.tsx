@@ -1,6 +1,9 @@
 import type { NodeProps } from '@xyflow/react'
 import type { CanvasPrimitive } from '../../domain/types'
 import { PRIMITIVE_SIZE } from './primitiveConstants'
+import { LinePrimitiveNode } from './LinePrimitiveNode.view'
+import { ImagePrimitiveNode } from './ImagePrimitiveNode.view'
+import { StickerPrimitiveNode } from './StickerPrimitiveNode.view'
 import './PrimitiveNode.style.scss'
 
 const CENTER = PRIMITIVE_SIZE / 2
@@ -20,6 +23,10 @@ const ARROW_POINTS = `${CENTER},4 52,26 40,26 40,60 24,60 24,26 12,26`
 
 export const PrimitiveNode = ({ data, selected }: NodeProps) => {
     const primitive = data as unknown as CanvasPrimitive
+
+    if (primitive.shape === 'line') return <LinePrimitiveNode primitive={primitive} selected={selected} />
+    if (primitive.shape === 'image') return <ImagePrimitiveNode primitive={primitive} selected={selected} />
+    if (primitive.shape === 'sticker') return <StickerPrimitiveNode primitive={primitive} selected={selected} />
 
     return (
         <div className={`primitive-node${selected ? ' primitive-node--selected' : ''}`}>

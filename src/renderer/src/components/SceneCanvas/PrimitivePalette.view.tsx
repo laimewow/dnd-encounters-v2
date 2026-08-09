@@ -1,5 +1,5 @@
 import type { DragEvent } from 'react'
-import { ArrowUp, Circle, Square, Star, Triangle, type LucideIcon } from 'lucide-react'
+import { ArrowUp, Circle, Slash, Square, Star, StickyNote, Triangle, Type, type LucideIcon } from 'lucide-react'
 import type { PrimitiveShape } from '../../domain/types'
 import { PRIMITIVE_SHAPE_DRAG_TYPE } from '../../lib/dragTypes'
 import './PrimitivePalette.style.scss'
@@ -10,6 +10,9 @@ const SHAPES: { shape: PrimitiveShape; label: string; icon: LucideIcon }[] = [
     { shape: 'star', label: 'Звезда', icon: Star },
     { shape: 'triangle', label: 'Треугольник', icon: Triangle },
     { shape: 'arrow', label: 'Стрелка', icon: ArrowUp },
+    { shape: 'line', label: 'Линия', icon: Slash },
+    { shape: 'text', label: 'Текст', icon: Type },
+    { shape: 'sticker', label: 'Стикер', icon: StickyNote },
 ]
 
 const onDragStart = (event: DragEvent<HTMLDivElement>, shape: PrimitiveShape) => {
@@ -31,5 +34,6 @@ export const PrimitivePalette = () => (
                 <span>{label}</span>
             </div>
         ))}
+        <p className="primitive-palette__hint">Изображение: перетащите файл на канвас или вставьте (Ctrl+V)</p>
     </div>
 )

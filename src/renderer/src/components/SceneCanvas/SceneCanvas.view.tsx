@@ -6,6 +6,7 @@ import { PrimitiveNode } from './PrimitiveNode.view'
 import { PrimitivePalette } from './PrimitivePalette.view'
 import { PrimitiveInspector } from './PrimitiveInspector.view'
 import { PRIMITIVE_SIZE } from './primitiveConstants'
+import { SceneCanvasProvider } from './SceneCanvasContext'
 import './SceneCanvas.style.scss'
 
 const nodeTypes = { primitive: PrimitiveNode }
@@ -30,51 +31,58 @@ const SceneCanvasInner = () => {
     }
 
     return (
-        <div className="scene-canvas">
-            <div className="scene-canvas__toolbar">
-                <span className="scene-canvas__scene-name">{data.scene.name}</span>
-                <button type="button" className="btn btn--outline" onClick={events.toggleMode}>
-                    {data.mode === 'edit' ? <Eye size={16} /> : <Pencil size={16} />}
-                    {data.mode === 'edit' ? 'В режим использования' : 'В режим редактирования'}
-                </button>
-            </div>
+        <SceneCanvasProvider value={{ sceneId: data.scene.id, mode: data.mode }}>
+            <div className="scene-canvas">
+                <div className="scene-canvas__toolbar">
+                    <span className="scene-canvas__scene-name">{data.scene.name}</span>
+                    <button type="button" className="btn btn--outline" onClick={events.toggleMode}>
+                        {data.mode === 'edit' ? <Eye size={16} /> : <Pencil size={16} />}
+                        {data.mode === 'edit' ? 'В режим использования' : 'В режим редактирования'}
+                    </button>
+                </div>
 
-            <div className="scene-canvas__viewport" onDragOver={events.onDragOver} onDrop={events.onDrop}>
-                <ReactFlow
-                    nodes={data.nodes}
-                    edges={[]}
-                    nodeTypes={nodeTypes}
-                    onNodesChange={events.onNodesChange}
-                    onNodeDragStop={events.onNodeDragStop}
-                    onNodeClick={events.onNodeClick}
-                    onNodeDoubleClick={events.onNodeDoubleClick}
-                    nodesConnectable={false}
-                    elementsSelectable={data.mode === 'edit'}
-                    nodeDragThreshold={5}
-                    nodeClickDistance={5}
-                    deleteKeyCode={null}
-                    fitView
+                <div
+                    ref={data.wrapperRef}
+                    className="scene-canvas__viewport"
+                    onDragOver={events.onDragOver}
+                    onDrop={events.onDrop}
                 >
-                    <Background variant={BackgroundVariant.Lines} gap={PRIMITIVE_SIZE} />
-                    <Controls showInteractive={false} />
-                </ReactFlow>
+                    <ReactFlow
+                        nodes={data.nodes}
+                        edges={[]}
+                        nodeTypes={nodeTypes}
+                        onNodesChange={events.onNodesChange}
+                        onNodeDragStop={events.onNodeDragStop}
+                        onNodeClick={events.onNodeClick}
+                        onNodeDoubleClick={events.onNodeDoubleClick}
+                        nodesConnectable={false}
+                        elementsSelectable={data.mode === 'edit'}
+                        nodeDragThreshold={5}
+                        nodeClickDistance={5}
+                        deleteKeyCode={null}
+                        fitView
+                    >
+                        <Background variant={BackgroundVariant.Lines} gap={PRIMITIVE_SIZE} />
+                        <Controls showInteractive={false} />
+                    </ReactFlow>
 
-                {data.mode === 'edit' && <PrimitivePalette />}
+                    {data.mode === 'edit' && <PrimitivePalette />}
+                </div>
+
+                {data.mode === 'edit' && data.selectedPrimitive && (
+                    <PrimitiveInspector
+                        primitive={data.selectedPrimitive}
+                        scene={data.scene}
+                        scenesForGame={data.scenesForGame}
+                        masterCards={data.masterCards}
+                        onChange={events.updateSelected}
+                        onRemove={events.removeSelected}
+                        onRotate={events.rotateSelected}
+                        onClose={events.closeInspector}
+                    />
+                )}
             </div>
-
-            {data.mode === 'edit' && data.selectedPrimitive && (
-                <PrimitiveInspector
-                    primitive={data.selectedPrimitive}
-                    scene={data.scene}
-                    scenesForGame={data.scenesForGame}
-                    masterCards={data.masterCards}
-                    onChange={events.updateSelected}
-                    onRemove={events.removeSelected}
-                    onRotate={events.rotateSelected}
-                    onClose={events.closeInspector}
-                />
-            )}
-        </div>
+        </SceneCanvasProvider>
     )
 }
 
